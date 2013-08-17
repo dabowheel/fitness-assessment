@@ -1,10 +1,10 @@
 from setuptools import setup
 
-setup(name='YourAppName',
+setup(name='fitnessassessment',
       version='1.0',
-      description='OpenShift App',
-      author='Your Name',
-      author_email='example@example.com',
+      description='Assess your fitness',
+      author='Miguel Provencio',
+      author_email='miguel.a.provencio@gmail.com',
       url='http://www.python.org/sigs/distutils-sig/',
       install_requires=['Flask>=0.6'],
      )
