@@ -95,7 +95,6 @@ function onChange() {
 	
 	var metric = new OneAndHalfRun(sex,weight.value,weightUnitsValue,time.value,heartRate.value);
 	if (metric.isValid()) {
-		alert(metric.toString());
 		result.value = round(metric.calculate());
 	}
 }
