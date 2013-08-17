@@ -1,5 +1,31 @@
 <!doctype html>
+<html>
+<head>
+<script type="text/javascript" src="static/input.js"></script>
+</head>
+<body>
 <title>1.5 mile run/walk</title>
 <h2>1.5 mile run/walk</h2>
 
-<p>George et al. (1993)<p>
+<div>
+<table>
+<tr>
+	<td>Gender:</td><td><input id="sexFemale" type="radio" name="sex" value="female" onchange="onChange();">Female<input id="sexMale" type="radio" name="sex" value="male" onchange="onChange();">Male</td>
+</tr>
+<tr>
+	<td>Weight:</td><td><input id="weight" type="text" name="weight" size="3" onchange="onChange();"><select id="weightUnits" onChange="onChange();"><option value="lbs">lbs</option><option value="kg">kg</option></select></td>
+</tr>
+<tr>
+	<td>Time:</td><td><input id="time" type="text" name="time" size=3 onchange="onChange();">minutes</td>
+</tr>
+<tr>
+	<td>Heart rate:</td><td><input id="heartRate" type="text" name="heartrate" size=3 onchange="onChange();"></td>
+</tr>
+<tr>
+	<td>VO2max:</td><td><input id="result" type="text" name="result" size="5" disabled> ml/kg/min</td>
+</tr>
+</table>
+<input type="submit" value="Save">
+</div>
+</body>
+</html>
