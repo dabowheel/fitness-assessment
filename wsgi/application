@@ -154,6 +154,9 @@ def application(environ, start_response):
     Place your application here
   </p>
   <p>
+    hello
+  </p>
+  <p>
     In order to commit to your new project, go to your projects git repo (created with the rhc app create command).  Make your changes, then run:
   </p>
   <pre>
