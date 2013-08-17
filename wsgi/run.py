@@ -5,7 +5,7 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template("index.html")
+    return "root path is " + app.root_path
 
 @app.route('/oneAndHalfMileRunWalk')
 def oneAndHalfMileRunWalk():
