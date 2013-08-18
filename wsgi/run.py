@@ -17,7 +17,13 @@ def connect_db():
         return sqlite3.connect("C:\\Users\\Miguel\\temp.db")
     except:
         return sqlite3.connect("/tmp/jobokugamen.db")
+    if not hasTable():
+        init_db()
 
+def hasTable():
+    cur = g.db.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='entries'")
+    return len(cur.fetchall()) > 0
+    
 def init_db():
     with closing(connect_db()) as db:
         with app.open_resource('schema.sql', mode='r') as f:
@@ -73,7 +79,14 @@ def saveProfile():
     g.db.commit()
     flash('Profile updated successfully')
     return redirect(url_for('showEntries'))
-    
+
+@app.route('/ClearUserData')
+def clearUserData():
+    if not session.get('logged_in'):
+        abort(401)
+    init_db()
+    flash('User data cleared successfully')
+    return redirect(url_for('showEntries'))    
     
 @app.route('/login', methods=['GET', 'POST'])
 def login():
