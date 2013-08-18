@@ -21,7 +21,6 @@ def connect_db():
 def hasTable():
     cur = g.db.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='entries'")
     rows = cur.fetchall()
-    res = [dict(name=row[0]) for row in rows]
     return len(rows)>0
     
 def init_db():
@@ -43,6 +42,9 @@ def teardown_request(exception):
         
 @app.route('/')
 def showEntries():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+        
     profile = getProfile()
     if profile == None or profile['sex'] == "" or profile['weight'] == "" or profile['weightUnit'] == "":
         return redirect(url_for('profile'))

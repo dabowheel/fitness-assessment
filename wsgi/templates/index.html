@@ -2,7 +2,7 @@
 
 {% extends "layout.html" %}
 {% block body %}
-  {% if session.logged_in %}
+{% if session.logged_in %}
 		<div>
 		<form id="entryForm" action="/Add" method="post" >
 			<input id="sex" type="hidden" name="sex" value="{{profile.sex}}">
@@ -30,7 +30,6 @@
 		<input id="save" type="button" value="Save" onclick="saveEntry();">
 		</form>
 		</div>
-  {% endif %}
  
 {% if entries|length > 0 %}
   <table border=1 style="border-collapse:collapse; border: solid #377ba8 1px;">
@@ -43,4 +42,6 @@
 
     <p><em>No entries here so far</em>
  {% endif %}
+
+{% endif %}
 {% endblock %}
