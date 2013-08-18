@@ -13,7 +13,10 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 def connect_db():
-    return sqlite3.connect("C:\\Users\\Miguel\\temp.db")
+    try:
+        return sqlite3.connect("C:\\Users\\Miguel\\temp.db")
+    except:
+        return sqlite3.connect("/tmp/jobokugamen.db")
 
 def init_db():
     with closing(connect_db()) as db:
