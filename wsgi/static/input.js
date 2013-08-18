@@ -75,34 +75,42 @@ function round(num) {
 }
 
 
-
-function onChange() {
-	var sexMale = document.getElementById("sexMale");
-	var sexFemale = document.getElementById("sexFemale");
+function getMetric() {
+	var sex = document.getElementById("sex");
 	var weight = document.getElementById("weight");
 	var weightUnit = document.getElementById("weightUnit");
 	var time = document.getElementById("time");
 	var heartRate = document.getElementById("heartRate");
+	
+	var weightUnitValue = weightUnit.options[weightUnit.selectedIndex].value;
+	
+	return new OneAndHalfRun(sex.value,weight.value,weightUnitValue,time.value,heartRate.value);
+}
+function onChange() {
+	var metric = getMetric();
 	var result = document.getElementById("result");
 	
-	var sex;
-	if (sexFemale.checked) {
-		sex = "female";
-	} else if (sexMale.checked) {
-		sex = "male";
-	}
-	var weightUnitValue = weightUnit.options[weightUnit.selectedIndex].value
-	
-	var metric = new OneAndHalfRun(sex,weight.value,weightUnitValue,time.value,heartRate.value);
 	if (metric.isValid()) {
 		result.value = round(metric.calculate());
+	} else {
+		result.value = "";
 	}
 }
 
 function saveEntry() {
+	var metric = getMetric();
+	
+	if (!metric.isValid()) {
+		return;
+	}
+	
 	var vo2max = document.getElementById("vo2max");
 	var result = document.getElementById("result");
 	vo2max.value = result.value;
 	var form = document.getElementById("entryForm");
-	form.submit();
+	if (vo2max.value.length > 0) {
+		form.submit();
+	} else {
+		alert("There are one or more fields that are not entered.")
+	}
 }

@@ -5,34 +5,38 @@
   {% if session.logged_in %}
 		<div>
 		<form id="entryForm" action="/Add" method="post" >
+			<input id="sex" type="hidden" name="sex" value="{{profile.sex}}">
 		<table>
 		<tr>
-			<td>Gender:</td><td><input id="sexFemale" type="radio" name="sex" value="female" onchange="onChange();">Female<input id="sexMale" type="radio" name="sex" value="male" onchange="onChange();">Male</td>
+			<td>Weight:</td><td>
+			<input id="weight" type="text" name="weight" value="{{profile.weight}}" size="3" onchange="onChange();">
+			{% if profile.weightUnit == "kg" %}
+			<select id="weightUnit" name="weightUnit" onChange="onChange();"><option value="lbs">lbs</option><option value="kg" selected>kg</option></select></td>
+			{% else %}
+			<select id="weightUnit" name="weightUnit" onChange="onChange();"><option value="lbs" selected>lbs</option><option value="kg">kg</option></select></td>
+			{% endif %}
 		</tr>
 		<tr>
-			<td>Weight:</td><td><input id="weight" type="text" name="weight" size="3" onchange="onChange();"><select id="weightUnit" name="weightUnit" onChange="onChange();"><option value="lbs">lbs</option><option value="kg">kg</option></select></td>
+			<td>1 Mile time:</td><td><input id="time" type="text" name="time" size=3 onchange="onChange();">minutes</td>
 		</tr>
 		<tr>
-			<td>Time:</td><td><input id="time" type="text" name="time" size=3 onchange="onChange();">minutes</td>
-		</tr>
-		<tr>
-			<td>Heart rate:</td><td><input id="heartRate" type="text" name="heartRate" size=3 onchange="onChange();"></td>
+			<td>Heart rate:</td><td><input id="heartRate" type="text" name="heartRate" size=3 onchange="onChange();">bpm</td>
 		</tr>
 		<tr>
 			<td>VO2max:</td><td><input id="result" type="text" name="result" size="5" disabled> ml/kg/min</td>
 		</tr>
 		</table>
 		<input id="vo2max" type="hidden" name="vo2max">
-		<input type="button" value="Save" onclick="saveEntry();">
+		<input id="save" type="button" value="Save" onclick="saveEntry();">
 		</form>
 		</div>
   {% endif %}
  
 {% if entries|length > 0 %}
-  <table border=1>
-    <tr><th>Gender</th><th>Weight</th><th>Time</th><th>Heart Rate</th><th>VO2max</th></tr>
+  <table border=1 style="border-collapse:collapse; border: solid #377ba8 1px;">
+    <tr><th>Weight</th><th>1 Mile Time</th><th>Heart Rate</th><th>VO2max</th></tr>
   {% for entry in entries %}
-	<tr><td>{{ entry.sex }}</td><td>{{ entry.weight }} {{ entry.weightUnit }}</td><td>{{ entry.mileTime }}</td><td>{{ entry.heartRate }}</td><td>{{ entry.vo2max }}</td></tr>
+	<tr><td>{{ entry.weight }} {{ entry.weightUnit }}</td><td>{{ entry.mileTime }} minutes</td><td>{{ entry.heartRate }} bpm</td><td>{{ entry.vo2max }} ml/kg/min</td></tr>
 	{% endfor %}
   </table>
   {% else %}

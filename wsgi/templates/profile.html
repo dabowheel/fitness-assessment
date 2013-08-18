@@ -9,24 +9,24 @@
 		<tr>
 			<td>Gender:</td>
 			{% if profile.sex == "female" %}
-			<td><input id="sexFemale" type="radio" name="sex" value="female" checked onchange="onChange();">Female<input id="sexMale" type="radio" name="sex" value="male" onchange="onChange();">Male</td>
+			<td><input type="hidden" name="sex" value="female">Female</td>
 			{% elif profile.sex == "male" %}
-			<td><input id="sexFemale" type="radio" name="sex" value="female" checked onchange="onChange();">Female<input id="sexMale" type="radio" name="sex" value="male" onchange="onChange();">Male</td>
+			<td><input type="hidden" name="sex" value="male">Male</td>
 			{% else %}
-			<td><input id="sexFemale" type="radio" name="sex" value="female" onchange="onChange();">Female<input id="sexMale" type="radio" name="sex" value="male" onchange="onChange();">Male</td>			
+			<td><input id="sexFemale" type="radio" name="sex" value="female">Female<input id="sexMale" type="radio" name="sex" value="male">Male</td>			
 			{% endif %}
 		</tr>
 		<tr>
 			<td>Weight:</td>
-			<td><input id="weight" type="text" name="weight" value="{{profile.weight}}" size="3" onchange="onChange();">
-			{% if profile.weightUnit == "kg" %}}
-			<select id="weightUnit" name="weightUnit" onChange="onChange();"><option value="lbs">lbs</option><option value="kg">kg</option></select></td>
+			<td><input id="weight" type="text" name="weight" value="{{profile.weight}}" size="3">
+			{% if profile.weightUnit == "kg" %}
+			<select id="weightUnit" name="weightUnit"><option value="lbs">lbs</option><option value="kg" selected>kg</option></select></td>
 			{% else %}
-			<select id="weightUnit" name="weightUnit" onChange="onChange();"><option value="lbs">lbs</option><option value="kg">kg</option></select></td>
+			<select id="weightUnit" name="weightUnit"><option value="lbs" selected>lbs</option><option value="kg">kg</option></select></td>
 			{% endif %}
 		</tr>
 		</table>
-		<input type="submit" value="Save" onclick="saveEntry();">
+		<input type="submit" value="Save">
 		</form>
 		
 		<p><a href="ClearUserData">Clear all user data</a>

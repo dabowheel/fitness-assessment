@@ -17,22 +17,23 @@ def connect_db():
         return sqlite3.connect("C:\\Users\\Miguel\\temp.db")
     except:
         return sqlite3.connect("/tmp/jobokugamen.db")
-    if not hasTable():
-        init_db()
 
 def hasTable():
     cur = g.db.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='entries'")
-    return len(cur.fetchall()) > 0
+    rows = cur.fetchall()
+    res = [dict(name=row[0]) for row in rows]
+    return len(rows)>0
     
 def init_db():
-    with closing(connect_db()) as db:
-        with app.open_resource('schema.sql', mode='r') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
+    with app.open_resource('schema.sql', mode='r') as f:
+        g.db.cursor().executescript(f.read())
+    g.db.commit()
         
 @app.before_request
 def before_request():
     g.db = connect_db()
+    if not hasTable():
+        init_db()
 
 @app.teardown_request
 def teardown_request(exception):
@@ -42,15 +43,33 @@ def teardown_request(exception):
         
 @app.route('/')
 def showEntries():
-    cur = g.db.execute('select sex,weight,weightUnit,mileTime,heartRate,vo2max from entries order by id desc')
-    entries = [dict(sex=row[0], weight=row[1], weightUnit=row[2], mileTime=row[3], heartRate=row[4], vo2max=row[5]) for row in cur.fetchall()]
-    return render_template("index.html",entries=entries,page="home")
+    profile = getProfile()
+    if profile == None or profile['sex'] == "" or profile['weight'] == "" or profile['weightUnit'] == "":
+        return redirect(url_for('profile'))
+    cur = g.db.execute('select weight,weightUnit,mileTime,heartRate,vo2max from entries order by id desc')
+    entries = [dict(weight=row[0], weightUnit=row[1], mileTime=row[2], heartRate=row[3], vo2max=row[4]) for row in cur.fetchall()]
+    return render_template("index.html",profile=profile,entries=entries,page="home")
 
 @app.route('/Profile')
 def profile():
-    cur = g.db.execute('select sex,weight,weightUnit from profile order by id desc')
-    profile = [dict(sex=row[0], weight=row[1], weightUnit=row[2]) for row in cur.fetchall()]
+    profile = getProfile()
     return render_template("profile.html",profile=profile,page="profile")
+
+def getProfile():
+    cur = g.db.execute('select sex,weight,weightUnit from profile where id=1 order by id desc')
+    row = cur.fetchone()
+    if row == None:
+        return None
+    else:
+        return dict(sex=row[0], weight=row[1], weightUnit=row[2])
+    
+def updateProfile(sex,weight,weightUnit):
+    g.db.execute('update profile set sex=?, weight=?, weightUnit=? where id=1', [sex, weight, weightUnit])
+    g.db.commit()
+    
+def insertProfile(sex,weight,weightUnit):
+    g.db.execute('insert into profile (sex, weight, weightUnit) values (?, ?, ?)', [sex, weight, weightUnit])
+    g.db.commit()
 
 @app.route('/Add', methods=['POST'])
 def addEntry():
@@ -60,9 +79,11 @@ def addEntry():
         weightUnit = request.form.getlist("weightUnit")[0]
     else:
         weightUnit = ""
-    g.db.execute('insert into entries (sex, weight, weightUnit, mileTime, heartRate, vo2max) values (?, ?, ?, ?, ?, ?)',
-                 [request.form['sex'], request.form['weight'], weightUnit, request.form['time'], request.form['heartRate'], request.form['vo2max']])
+    g.db.execute('insert into entries (weight, weightUnit, mileTime, heartRate, vo2max) values (?, ?, ?, ?, ?)',
+                 [request.form['weight'], weightUnit, request.form['time'], request.form['heartRate'], request.form['vo2max']])
     g.db.commit()
+    profile = getProfile()
+    updateProfile(profile['sex'],request.form['weight'],request.form['weightUnit'])
     flash('New entry was successfully posted')
     return redirect(url_for('showEntries'))
 
@@ -74,9 +95,11 @@ def saveProfile():
         weightUnit = request.form.getlist("weightUnit")[0]
     else:
         weightUnit = ""
-    g.db.execute('insert into profile (sex, weight, weightUnit) values (?, ?, ?)',
-                 [request.form['sex'], request.form['weight'], weightUnit])
-    g.db.commit()
+    if getProfile() == None:
+        insertProfile(request.form['sex'],request.form['weight'],weightUnit)
+    else:
+        updateProfile(request.form['sex'],request.form['weight'],weightUnit)
+        
     flash('Profile updated successfully')
     return redirect(url_for('showEntries'))
 
