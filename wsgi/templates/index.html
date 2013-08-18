@@ -1,5 +1,42 @@
-<!doctype html>
-<title>Fitness Assessment</title>
-<h2>Fitness Assessment</h2>
+<script type="text/javascript" src="static/input.js"></script>
 
-<p><a href="/OneAndHalfMileRunWalk">1.5 mile run/walk</a><p>
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+		<div>
+		<form id="entryForm" action="/Add" method="post" >
+		<table>
+		<tr>
+			<td>Gender:</td><td><input id="sexFemale" type="radio" name="sex" value="female" onchange="onChange();">Female<input id="sexMale" type="radio" name="sex" value="male" onchange="onChange();">Male</td>
+		</tr>
+		<tr>
+			<td>Weight:</td><td><input id="weight" type="text" name="weight" size="3" onchange="onChange();"><select id="weightUnit" name="weightUnit" onChange="onChange();"><option value="lbs">lbs</option><option value="kg">kg</option></select></td>
+		</tr>
+		<tr>
+			<td>Time:</td><td><input id="time" type="text" name="time" size=3 onchange="onChange();">minutes</td>
+		</tr>
+		<tr>
+			<td>Heart rate:</td><td><input id="heartRate" type="text" name="heartRate" size=3 onchange="onChange();"></td>
+		</tr>
+		<tr>
+			<td>VO2max:</td><td><input id="result" type="text" name="result" size="5" disabled> ml/kg/min</td>
+		</tr>
+		</table>
+		<input id="vo2max" type="hidden" name="vo2max">
+		<input type="button" value="Save" onclick="saveEntry();">
+		</form>
+		</div>
+  {% endif %}
+ 
+{% if entries|length > 0 %}
+  <table border=1>
+    <tr><th>Gender</th><th>Weight</th><th>Time</th><th>Heart Rate</th><th>VO2max</th></tr>
+  {% for entry in entries %}
+	<tr><td>{{ entry.sex }}</td><td>{{ entry.weight }} {{ entry.weightUnit }}</td><td>{{ entry.mileTime }}</td><td>{{ entry.heartRate }}</td><td>{{ entry.vo2max }}</td></tr>
+	{% endfor %}
+  </table>
+  {% else %}
+
+    <p><em>No entries here so far</em>
+ {% endif %}
+{% endblock %}

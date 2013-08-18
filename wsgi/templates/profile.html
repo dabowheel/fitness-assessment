@@ -1,0 +1,33 @@
+<script type="text/javascript" src="static/user.js"></script>
+
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+		<div>
+		<form id="entryForm" action="/SaveProfile" method="post" >
+		<table>
+		<tr>
+			<td>Gender:</td>
+			{% if profile.sex == "female" %}
+			<td><input id="sexFemale" type="radio" name="sex" value="female" checked onchange="onChange();">Female<input id="sexMale" type="radio" name="sex" value="male" onchange="onChange();">Male</td>
+			{% elif profile.sex == "male" %}
+			<td><input id="sexFemale" type="radio" name="sex" value="female" checked onchange="onChange();">Female<input id="sexMale" type="radio" name="sex" value="male" onchange="onChange();">Male</td>
+			{% else %}
+			<td><input id="sexFemale" type="radio" name="sex" value="female" onchange="onChange();">Female<input id="sexMale" type="radio" name="sex" value="male" onchange="onChange();">Male</td>			
+			{% endif %}
+		</tr>
+		<tr>
+			<td>Weight:</td>
+			<td><input id="weight" type="text" name="weight" value="{{profile.weight}}" size="3" onchange="onChange();">
+			{% if profile.weightUnit == "kg" %}}
+			<select id="weightUnit" name="weightUnit" onChange="onChange();"><option value="lbs">lbs</option><option value="kg">kg</option></select></td>
+			{% else %}
+			<select id="weightUnit" name="weightUnit" onChange="onChange();"><option value="lbs">lbs</option><option value="kg">kg</option></select></td>
+			{% endif %}
+		</tr>
+		</table>
+		<input type="submit" value="Save" onclick="saveEntry();">
+		</form>
+		</div>
+  {% endif %}
+{% endblock %}

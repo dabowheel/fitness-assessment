@@ -80,7 +80,7 @@ function onChange() {
 	var sexMale = document.getElementById("sexMale");
 	var sexFemale = document.getElementById("sexFemale");
 	var weight = document.getElementById("weight");
-	var weightUnits = document.getElementById("weightUnits");
+	var weightUnit = document.getElementById("weightUnit");
 	var time = document.getElementById("time");
 	var heartRate = document.getElementById("heartRate");
 	var result = document.getElementById("result");
@@ -91,10 +91,18 @@ function onChange() {
 	} else if (sexMale.checked) {
 		sex = "male";
 	}
-	var weightUnitsValue = weightUnits.options[weightUnits.selectedIndex].value
+	var weightUnitValue = weightUnit.options[weightUnit.selectedIndex].value
 	
-	var metric = new OneAndHalfRun(sex,weight.value,weightUnitsValue,time.value,heartRate.value);
+	var metric = new OneAndHalfRun(sex,weight.value,weightUnitValue,time.value,heartRate.value);
 	if (metric.isValid()) {
 		result.value = round(metric.calculate());
 	}
+}
+
+function saveEntry() {
+	var vo2max = document.getElementById("vo2max");
+	var result = document.getElementById("result");
+	vo2max.value = result.value;
+	var form = document.getElementById("entryForm");
+	form.submit();
 }
