@@ -1,6 +1,5 @@
 from flask import Flask,render_template,request,session,g,redirect,url_for,abort,flash
 import sqlite3
-from contextlib import closing
  
 # configuration
 DATABASE = '/tmp/flaskr.db'
@@ -48,8 +47,8 @@ def showEntries():
     profile = getProfile()
     if profile == None or profile['sex'] == "" or profile['weight'] == "" or profile['weightUnit'] == "":
         return redirect(url_for('profile'))
-    cur = g.db.execute('select weight,weightUnit,mileTime,heartRate,vo2max from entries order by id desc')
-    entries = [dict(weight=row[0], weightUnit=row[1], mileTime=row[2], heartRate=row[3], vo2max=row[4]) for row in cur.fetchall()]
+    cur = g.db.execute('select weight,weightUnit,mileTime,heartRate,vo2max,date(date) as date from entries order by id desc')
+    entries = [dict(weight=row[0], weightUnit=row[1], mileTime=row[2], heartRate=row[3], vo2max=row[4], date=row[5]) for row in cur.fetchall()]
     return render_template("index.html",profile=profile,entries=entries,page="home")
 
 @app.route('/Profile')
@@ -73,6 +72,10 @@ def insertProfile(sex,weight,weightUnit):
     g.db.execute('insert into profile (sex, weight, weightUnit) values (?, ?, ?)', [sex, weight, weightUnit])
     g.db.commit()
 
+@app.route('/Help')
+def showHelp():
+    return render_template("help.html")
+
 @app.route('/Add', methods=['POST'])
 def addEntry():
     if not session.get('logged_in'):
@@ -81,7 +84,7 @@ def addEntry():
         weightUnit = request.form.getlist("weightUnit")[0]
     else:
         weightUnit = ""
-    g.db.execute('insert into entries (weight, weightUnit, mileTime, heartRate, vo2max) values (?, ?, ?, ?, ?)',
+    g.db.execute('insert into entries (weight, weightUnit, mileTime, heartRate, vo2max, date) values (?, ?, ?, ?, ?, datetime("now"))',
                  [request.form['weight'], weightUnit, request.form['time'], request.form['heartRate'], request.form['vo2max']])
     g.db.commit()
     profile = getProfile()

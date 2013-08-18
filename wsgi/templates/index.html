@@ -33,9 +33,9 @@
  
 {% if entries|length > 0 %}
   <table border=1 style="border-collapse:collapse; border: solid #377ba8 1px;">
-    <tr><th>Weight</th><th>1 Mile Time</th><th>Heart Rate</th><th>VO2max</th></tr>
+    <tr><th>Date</th><th>Weight</th><th>1 Mile Time</th><th>Heart Rate</th><th>VO2max</th></tr>
   {% for entry in entries %}
-	<tr><td>{{ entry.weight }} {{ entry.weightUnit }}</td><td>{{ entry.mileTime }} minutes</td><td>{{ entry.heartRate }} bpm</td><td>{{ entry.vo2max }} ml/kg/min</td></tr>
+	<tr><td>{{entry.date}}</td><td>{{ entry.weight }} {{ entry.weightUnit }}</td><td>{{ entry.mileTime }} minutes</td><td>{{ entry.heartRate }} bpm</td><td>{{ entry.vo2max }} ml/kg/min</td></tr>
 	{% endfor %}
   </table>
   {% else %}

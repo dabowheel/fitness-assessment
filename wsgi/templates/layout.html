@@ -5,7 +5,6 @@
   <h1>Fitness Assessment</h1>
   <div class=metanav>
   {% if not session.logged_in %}
-    <a href="{{ url_for('login') }}">log in</a>
   {% else %}
     {% if page != "home" %}
     <a href="{{ url_for('showEntries') }}">home</a>
@@ -13,6 +12,7 @@
   	{% if page != "profile" %}
    	<a href="{{ url_for('profile') }}">profile</a>
    	{% endif %}
+    <a href="{{ url_for('showHelp') }}">help</a>
     <a href="{{ url_for('logout') }}">log out</a>
   {% endif %}
   </div>

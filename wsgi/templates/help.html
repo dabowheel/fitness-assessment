@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}  
+  <h4>How to conduct the test</h4>
+  <ol>
+  	<li>Measure your weight.
+  	<li>Warm up.
+  	<li>Take an easy, steady pace, 1 mile jog, timing how long it takes.
+  	<li>Record your heart rate (bpm) immediately after the jog.
+  </ol>
+  
+  <p>To interpret your VO2max result, look at <a href="http://www.brianmac.co.uk/vo2max.htm#vo2"> the chart data</a> for you gender and age group.
+  <p>VO2max calculation based on George et al. (1993) algorithms.
+  
+  {% endif %}
+{% endblock %}

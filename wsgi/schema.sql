@@ -5,7 +5,8 @@ create table entries (
   weightUnit text,
   mileTime text,
   heartRate text,
-  vo2max text
+  vo2max text,
+  date datetime
 );
 
 drop table if exists profile;
@@ -13,5 +14,6 @@ create table profile (
   id integer primary key autoincrement,
   sex text,
   weight text,
-  weightUnit text
+  weightUnit text,
+  age text
 );
